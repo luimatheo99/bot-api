@@ -1,0 +1,156 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum TypesDeliveryEnum {
+  delivery
+  withdraw
+}
+
+enum SchedulesDayEnum {
+  mon
+  tue
+  wed
+  thu
+  fri
+  sat
+  sun
+}
+
+type Schedules {
+  day SchedulesDayEnum
+  startTime String
+  endTime String
+  active Boolean @default(true)
+}
+
+type PaymentTypes {
+  description String
+  active Boolean @default(true)
+}
+
+type DeliveryFeeNeighborhoods {
+  name String
+  price Float
+}
+
+type DeliveryFeeCities {
+  name String
+  neighborhoods DeliveryFeeNeighborhoods[]
+}
+
+type DeliveryFee {
+  city DeliveryFeeCities[]
+}
+
+type TypesDelivery {
+  type TypesDeliveryEnum
+  time String
+}
+
+type Additional {
+  description String
+  price Float?
+}
+
+type Menu {
+  name String
+  description String?
+  active Boolean @default(true)
+  price   Float?
+  category String
+  subCategory String?
+  additional Additional[]
+}
+
+model RestaurantAdditional {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  description String
+  price Float?
+  idRestaurant String                 @db.ObjectId
+  restaurant   Restaurant              @relation(fields: [idRestaurant], references: [id])
+}
+
+model RestaurantCategory {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  description String
+  order Int?
+  restaurantSubcategory RestaurantSubCategory[]
+  idRestaurant String                 @db.ObjectId
+  restaurant   Restaurant              @relation(fields: [idRestaurant], references: [id])
+}
+
+model RestaurantSubCategory {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  description String
+  order Int?
+  idRestaurantCategory String                 @db.ObjectId
+  restaurantCategory   RestaurantCategory              @relation(fields: [idRestaurantCategory], references: [id])
+  idRestaurant String                 @db.ObjectId
+  restaurant   Restaurant              @relation(fields: [idRestaurant], references: [id])
+}
+
+model Restaurant {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  address String
+  activeOrder Boolean @default(true)
+  phoneNumber String
+  schedules Schedules[]
+  paymentTypes PaymentTypes[]
+  deliveryFee DeliveryFee?
+  typesDelivery TypesDelivery[]
+  menu Menu[]
+  user User[]
+  restaurantSubCategory RestaurantSubCategory[]
+  restaurantCategory RestaurantCategory[]
+  restaurantAdditional RestaurantAdditional[]
+  restaurantCart RestaurantCarts[]
+}
+
+model User {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  email    String  @unique
+  name     String
+  password String
+  idRestaurant String                 @db.ObjectId
+  restaurant   Restaurant              @relation(fields: [idRestaurant], references: [id])
+}
+
+type Customer {
+  name String
+  phoneNumber String
+}
+
+type RestaurantCartsAdditional {
+  description String
+  price Float
+}
+
+type RestaurantCartsProducts {
+  name String
+  description String
+  amount Float
+  quantity Int
+  observation String?
+  additional RestaurantCartsAdditional[]
+}
+
+model RestaurantCarts {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  customer Customer
+  products RestaurantCartsProducts[]
+  amount Float
+  idRestaurant String                 @db.ObjectId
+  restaurant   Restaurant              @relation(fields: [idRestaurant], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
+}
