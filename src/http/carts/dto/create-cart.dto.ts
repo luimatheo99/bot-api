@@ -1,5 +1,11 @@
+import {
+  RestaurantCartsProducts,
+  RestaurantCartsCustomer,
+} from '@prisma/client';
+
 export class CreateCartDto {
-  email: string;
-  name: string;
-  password: string;
+  customer: RestaurantCartsCustomer;
+  products: RestaurantCartsProducts[];
+  amount: number;
+  idRestaurant: string;
 }

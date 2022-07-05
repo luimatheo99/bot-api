@@ -18,6 +18,7 @@ export class RestaurantsService {
         name: createRestaurantDto.name,
         address: createRestaurantDto.address,
         phoneNumber: createRestaurantDto.phoneNumber,
+        phoneNumberTwillio: createRestaurantDto.phoneNumberTwillio,
       },
     });
 

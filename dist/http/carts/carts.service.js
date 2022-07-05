@@ -16,6 +16,11 @@ let CartsService = class CartsService {
     constructor(prisma) {
         this.prisma = prisma;
     }
+    async create(createCartDto) {
+        await this.prisma.restaurantCarts.create({
+            data: createCartDto,
+        });
+    }
 };
 CartsService = __decorate([
     (0, common_1.Injectable)(),

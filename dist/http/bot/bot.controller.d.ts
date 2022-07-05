@@ -1,21 +1,33 @@
 import { BotService } from './bot.service';
-interface IRequestStep3 {
+interface IReqPhoneNumberTwillio {
+    phoneNumberTwillio: string;
+}
+interface IReqStep3 {
     category: string;
+    phoneNumberTwillio: string;
+}
+interface IReqStep31 {
+    product: number;
+    category: string;
+    phoneNumberTwillio: string;
 }
 export declare class BotController {
     private readonly botService;
     constructor(botService: BotService);
-    step1(): Promise<{
+    step1(req: IReqPhoneNumberTwillio): Promise<{
         message: string;
     }>;
-    step2(): Promise<{
+    step2(req: IReqPhoneNumberTwillio): Promise<{
         message: string;
         options: string;
     }>;
-    step3(req: IRequestStep3): Promise<{
+    step3(req: IReqStep3): Promise<{
         message: string;
         options: string;
         additionalCount: number;
+    }>;
+    step31(req: IReqStep31): Promise<{
+        message: string;
     }>;
 }
 export {};
