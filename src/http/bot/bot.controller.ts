@@ -11,7 +11,7 @@ interface IReqStep3 {
 }
 
 interface IReqStep31 {
-  product: number;
+  product: string;
   category: string;
   phoneNumberTwillio: string;
 }
@@ -35,9 +35,9 @@ export class BotController {
     return this.botService.step3(req.category, req.phoneNumberTwillio);
   }
 
-  @Post('/step3.1')
+  @Post('/step3.0.1')
   step31(@Body() req: IReqStep31) {
-    return this.botService.step31(
+    return this.botService.step301(
       req.product,
       req.category,
       req.phoneNumberTwillio,

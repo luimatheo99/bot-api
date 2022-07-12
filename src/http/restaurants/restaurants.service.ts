@@ -60,6 +60,7 @@ export class RestaurantsService {
         name: updateRestaurantDto.name,
         address: updateRestaurantDto.address,
         phoneNumber: updateRestaurantDto.phoneNumber,
+        phoneNumberTwillio: '',
         activeOrder: updateRestaurantDto.activeOrder,
         deliveryFee: updateRestaurantDto.deliveryFee,
         paymentTypes: updateRestaurantDto.paymentTypes,

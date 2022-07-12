@@ -29,7 +29,7 @@ let BotController = class BotController {
         return this.botService.step3(req.category, req.phoneNumberTwillio);
     }
     step31(req) {
-        return this.botService.step31(req.product, req.category, req.phoneNumberTwillio);
+        return this.botService.step301(req.product, req.category, req.phoneNumberTwillio);
     }
 };
 __decorate([
@@ -54,7 +54,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], BotController.prototype, "step3", null);
 __decorate([
-    (0, common_1.Post)('/step3.1'),
+    (0, common_1.Post)('/step3.0.1'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),

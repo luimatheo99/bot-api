@@ -24,7 +24,9 @@ let BotService = class BotService {
     async step1(phoneNumberTwillio) {
         const phoneNumberTwillioFormatted = await formattedPhoneNumberTwillio(phoneNumberTwillio);
         const restaurant = await this.prisma.restaurant.findFirst({
-            where: { phoneNumberTwillio: phoneNumberTwillioFormatted },
+            where: {
+                phoneNumberTwillio: phoneNumberTwillioFormatted,
+            },
         });
         let schedules = '';
         for (const schedule of restaurant.schedules) {
@@ -60,7 +62,9 @@ let BotService = class BotService {
     async step2(phoneNumberTwillio) {
         const phoneNumberTwillioFormatted = await formattedPhoneNumberTwillio(phoneNumberTwillio);
         const restaurant = await this.prisma.restaurant.findFirst({
-            where: { phoneNumberTwillio: phoneNumberTwillioFormatted },
+            where: {
+                phoneNumberTwillio: phoneNumberTwillioFormatted,
+            },
         });
         const restaurantCategories = await this.prisma.restaurantCategory.findMany({
             where: { idRestaurant: restaurant.id },
@@ -83,7 +87,9 @@ let BotService = class BotService {
         var _a;
         const phoneNumberTwillioFormatted = await formattedPhoneNumberTwillio(phoneNumberTwillio);
         const restaurant = await this.prisma.restaurant.findFirst({
-            where: { phoneNumberTwillio: phoneNumberTwillioFormatted },
+            where: {
+                phoneNumberTwillio: phoneNumberTwillioFormatted,
+            },
             select: {
                 id: true,
                 menu: true,
@@ -104,7 +110,6 @@ let BotService = class BotService {
         for (const menu of menus) {
             if (menu.category === restaurantCategory.description) {
                 index++;
-                options += index + ',';
                 menusMessageFormatted += `*${index}*- ${menu.name} (${new Intl.NumberFormat('pt-BR', {
                     style: 'currency',
                     currency: 'BRL',
@@ -112,14 +117,19 @@ let BotService = class BotService {
                 additionalCount += menu.additional.length > 0 ? 1 : 0;
             }
         }
+        options = `[1-${index}]`;
         message += `${menusMessageFormatted}\nOu envie *#* para voltar`;
         return { message, options, additionalCount };
     }
-    async step31(product, category, phoneNumberTwillio) {
+    async step301(product, category, phoneNumberTwillio) {
         var _a;
+        const quantity = product.toLocaleLowerCase().split('x')[0].trim();
+        const item = Number(product.toLocaleLowerCase().split('x')[1].trim());
         const phoneNumberTwillioFormatted = await formattedPhoneNumberTwillio(phoneNumberTwillio);
         const restaurant = await this.prisma.restaurant.findFirst({
-            where: { phoneNumberTwillio: phoneNumberTwillioFormatted },
+            where: {
+                phoneNumberTwillio: phoneNumberTwillioFormatted,
+            },
             select: {
                 id: true,
                 menu: true,
@@ -138,16 +148,16 @@ let BotService = class BotService {
                 menusByCategory.push(menu);
             }
         }
-        const menu = menusByCategory[product - 1];
+        const menu = menusByCategory[item - 1];
         let message = `*${menu.name} - ${new Intl.NumberFormat('pt-BR', {
             style: 'currency',
             currency: 'BRL',
-        }).format(Number(menu.price))}${((_a = menu === null || menu === void 0 ? void 0 : menu.description) === null || _a === void 0 ? void 0 : _a.length) > 0 ? `\n-> ${menu.description}` : ''}*\n\n*Adicionais*\n`;
+        }).format(Number(menu.price))}*${((_a = menu === null || menu === void 0 ? void 0 : menu.description) === null || _a === void 0 ? void 0 : _a.length) > 0 ? `\n-> ${menu.description}` : ''}\n\n*Adicionais*\n`;
         let additionalMessageFormatted = '';
         let index = 0;
         for (const additional of menu.additional) {
             index++;
-            additionalMessageFormatted += `*${index}*- ${additional.description}`;
+            additionalMessageFormatted += `*${index}*- ${additional.description}\n`;
         }
         message += `${additionalMessageFormatted}\n\nInforme somente o número dos adicionais que deseja separado por (,) virgula ou envie a palavra *OK* para continuar\n\nOu envie *#* para voltar`;
         return { message };

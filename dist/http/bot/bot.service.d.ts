@@ -16,7 +16,7 @@ export declare class BotService {
         options: string;
         additionalCount: number;
     }>;
-    step31(product: number, category: string, phoneNumberTwillio: string): Promise<{
+    step301(product: string, category: string, phoneNumberTwillio: string): Promise<{
         message: string;
     }>;
 }

@@ -19,7 +19,9 @@ export class BotService {
     );
 
     const restaurant = await this.prisma.restaurant.findFirst({
-      where: { phoneNumberTwillio: phoneNumberTwillioFormatted },
+      where: {
+        phoneNumberTwillio: phoneNumberTwillioFormatted,
+      },
     });
 
     let schedules = '';
@@ -57,7 +59,9 @@ export class BotService {
     );
 
     const restaurant = await this.prisma.restaurant.findFirst({
-      where: { phoneNumberTwillio: phoneNumberTwillioFormatted },
+      where: {
+        phoneNumberTwillio: phoneNumberTwillioFormatted,
+      },
     });
 
     const restaurantCategories = await this.prisma.restaurantCategory.findMany({
@@ -86,7 +90,9 @@ export class BotService {
     );
 
     const restaurant = await this.prisma.restaurant.findFirst({
-      where: { phoneNumberTwillio: phoneNumberTwillioFormatted },
+      where: {
+        phoneNumberTwillio: phoneNumberTwillioFormatted,
+      },
       select: {
         id: true,
         menu: true,
@@ -111,7 +117,7 @@ export class BotService {
     for (const menu of menus) {
       if (menu.category === restaurantCategory.description) {
         index++;
-        options += index + ',';
+        // options += index + ',';
 
         menusMessageFormatted += `*${index}*- ${
           menu.name
@@ -126,18 +132,25 @@ export class BotService {
       }
     }
 
+    options = `[1-${index}]`;
+
     message += `${menusMessageFormatted}\nOu envie *#* para voltar`;
 
     return { message, options, additionalCount };
   }
 
-  async step31(product: number, category: string, phoneNumberTwillio: string) {
+  async step301(product: string, category: string, phoneNumberTwillio: string) {
+    const quantity = product.toLocaleLowerCase().split('x')[0].trim();
+    const item = Number(product.toLocaleLowerCase().split('x')[1].trim());
+
     const phoneNumberTwillioFormatted = await formattedPhoneNumberTwillio(
       phoneNumberTwillio,
     );
 
     const restaurant = await this.prisma.restaurant.findFirst({
-      where: { phoneNumberTwillio: phoneNumberTwillioFormatted },
+      where: {
+        phoneNumberTwillio: phoneNumberTwillioFormatted,
+      },
       select: {
         id: true,
         menu: true,
@@ -158,20 +171,20 @@ export class BotService {
         menusByCategory.push(menu);
       }
     }
-    const menu = menusByCategory[product - 1];
+    const menu = menusByCategory[item - 1];
 
     let message = `*${menu.name} - ${new Intl.NumberFormat('pt-BR', {
       style: 'currency',
       currency: 'BRL',
-    }).format(Number(menu.price))}${
+    }).format(Number(menu.price))}*${
       menu?.description?.length > 0 ? `\n-> ${menu.description}` : ''
-    }*\n\n*Adicionais*\n`;
+    }\n\n*Adicionais*\n`;
 
     let additionalMessageFormatted = '';
     let index = 0;
     for (const additional of menu.additional) {
       index++;
-      additionalMessageFormatted += `*${index}*- ${additional.description}`;
+      additionalMessageFormatted += `*${index}*- ${additional.description}\n`;
     }
 
     message += `${additionalMessageFormatted}\n\nInforme somente o número dos adicionais que deseja separado por (,) virgula ou envie a palavra *OK* para continuar\n\nOu envie *#* para voltar`;

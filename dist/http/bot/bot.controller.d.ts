@@ -7,7 +7,7 @@ interface IReqStep3 {
     phoneNumberTwillio: string;
 }
 interface IReqStep31 {
-    product: number;
+    product: string;
     category: string;
     phoneNumberTwillio: string;
 }
