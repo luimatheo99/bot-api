@@ -18,7 +18,7 @@ export class RestaurantsService {
         name: createRestaurantDto.name,
         address: createRestaurantDto.address,
         phoneNumber: createRestaurantDto.phoneNumber,
-        phoneNumberTwillio: createRestaurantDto.phoneNumberTwillio,
+        phoneNumberMessageBird: createRestaurantDto.phoneNumberMessageBird,
       },
     });
 
@@ -60,7 +60,7 @@ export class RestaurantsService {
         name: updateRestaurantDto.name,
         address: updateRestaurantDto.address,
         phoneNumber: updateRestaurantDto.phoneNumber,
-        phoneNumberTwillio: '',
+        phoneNumberMessageBird: '',
         activeOrder: updateRestaurantDto.activeOrder,
         deliveryFee: updateRestaurantDto.deliveryFee,
         paymentTypes: updateRestaurantDto.paymentTypes,

@@ -1,19 +1,21 @@
-import { Controller, Post, Body, Get, Param } from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { BotService } from './bot.service';
 
-interface IReqPhoneNumberTwillio {
-  phoneNumberTwillio: string;
+interface IReqPhoneNumberMessageBird {
+  phoneNumberMessageBird: string;
 }
 
 interface IReqStep3 {
   category: string;
-  phoneNumberTwillio: string;
+  phoneNumberMessageBird: string;
 }
 
-interface IReqStep31 {
+interface IReqStep301 extends IReqStep3 {
   product: string;
-  category: string;
-  phoneNumberTwillio: string;
+}
+
+interface IReqStep302 extends IReqStep301 {
+  additional: string;
 }
 
 @Controller('bot')
@@ -21,26 +23,38 @@ export class BotController {
   constructor(private readonly botService: BotService) {}
 
   @Post('/step1')
-  step1(@Body() req: IReqPhoneNumberTwillio) {
-    return this.botService.step1(req.phoneNumberTwillio);
+  step1(@Body() req: IReqPhoneNumberMessageBird) {
+    console.log(req);
+    return this.botService.step1(req.phoneNumberMessageBird);
   }
 
   @Post('/step2')
-  step2(@Body() req: IReqPhoneNumberTwillio) {
-    return this.botService.step2(req.phoneNumberTwillio);
+  step2(@Body() req: IReqPhoneNumberMessageBird) {
+    return this.botService.step2(req.phoneNumberMessageBird);
   }
 
   @Post('/step3')
   step3(@Body() req: IReqStep3) {
-    return this.botService.step3(req.category, req.phoneNumberTwillio);
+    return this.botService.step3(req.category, req.phoneNumberMessageBird);
   }
 
   @Post('/step3.0.1')
-  step31(@Body() req: IReqStep31) {
+  step301(@Body() req: IReqStep301) {
+    console.log(req);
     return this.botService.step301(
       req.product,
       req.category,
-      req.phoneNumberTwillio,
+      req.phoneNumberMessageBird,
+    );
+  }
+
+  @Post('/step3.0.2')
+  step302(@Body() req: IReqStep302) {
+    return this.botService.step302(
+      req.additional,
+      req.product,
+      req.category,
+      req.phoneNumberMessageBird,
     );
   }
 }

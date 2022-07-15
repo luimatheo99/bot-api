@@ -23,7 +23,7 @@ let RestaurantsService = class RestaurantsService {
                 name: createRestaurantDto.name,
                 address: createRestaurantDto.address,
                 phoneNumber: createRestaurantDto.phoneNumber,
-                phoneNumberTwillio: createRestaurantDto.phoneNumberTwillio,
+                phoneNumberMessageBird: createRestaurantDto.phoneNumberMessageBird,
             },
         });
         if (!restaurant) {
@@ -58,7 +58,7 @@ let RestaurantsService = class RestaurantsService {
                 name: updateRestaurantDto.name,
                 address: updateRestaurantDto.address,
                 phoneNumber: updateRestaurantDto.phoneNumber,
-                phoneNumberTwillio: '',
+                phoneNumberMessageBird: '',
                 activeOrder: updateRestaurantDto.activeOrder,
                 deliveryFee: updateRestaurantDto.deliveryFee,
                 paymentTypes: updateRestaurantDto.paymentTypes,

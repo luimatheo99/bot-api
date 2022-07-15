@@ -11,7 +11,7 @@ export class CreateRestaurantDto {
   address?: string;
   activeOrder?: boolean;
   phoneNumber?: string;
-  phoneNumberTwillio: string;
+  phoneNumberMessageBird: string;
   user?: CreateUserDto;
   schedules?: Schedules[];
   paymentTypes?: PaymentTypes[];
