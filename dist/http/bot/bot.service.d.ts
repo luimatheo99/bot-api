@@ -19,10 +19,8 @@ export declare class BotService {
     step301(product: string, category: string, phoneNumberMessageBird: string): Promise<{
         messageStep301: string;
     }>;
-    step302(additional: string, product: string, category: string, phoneNumberMessageBird: string): Promise<{
-        message: string;
-    }>;
-    step31(product: string, category: string, phoneNumberMessageBird: string): Promise<{
+    step302(additional: string, product: string, category: string, phoneNumberMessageBird: string): Promise<void>;
+    step31(product: string, category: string, phoneNumberMessageBird: string, additional: string): Promise<{
         messageStep31: string;
     }>;
 }

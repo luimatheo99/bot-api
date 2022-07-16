@@ -20,6 +20,7 @@ let CartsController = class CartsController {
         this.cartsService = cartsService;
     }
     create(req) {
+        console.log(req);
         return this.cartsService.create(req.phoneNumberMessageBird, req.phoneNumberCustomer, req.product, req.additional, req.category, req.observation);
     }
 };

@@ -17,6 +17,7 @@ export class CartsController {
 
   @Post('/add')
   create(@Body() req: IReqCreate) {
+    console.log(req);
     return this.cartsService.create(
       req.phoneNumberMessageBird,
       req.phoneNumberCustomer,

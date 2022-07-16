@@ -23,6 +23,8 @@ export class CartsService {
     const quantity = parseInt(product.toLocaleLowerCase().split('x')[0].trim());
     const item = Number(product.toLocaleLowerCase().split('x')[1].trim());
 
+    const additionalArray = additional.split(',');
+
     const restaurant = await this.prisma.restaurant.findFirst({
       where: {
         phoneNumberMessageBird: phoneNumberMessageBirdFormatted,
@@ -53,20 +55,37 @@ export class CartsService {
       where: { customer: { phoneNumber: phoneNumberCustomer } },
     });
 
+    let additionalAmount = 0;
+    const additionalList = [];
+    for (const additionalItem of additionalArray) {
+      const additionalPrice =
+        menu.additional[parseInt(additionalItem.trim()) - 1].price;
+
+      const additionalDescription =
+        menu.additional[parseInt(additionalItem.trim()) - 1].description;
+
+      additionalList.push({
+        description: additionalDescription,
+        price: additionalPrice,
+      });
+
+      additionalAmount += additionalPrice * quantity;
+    }
+
     if (!cart) {
       const cartNew: CreateCartDto = {
         customer: {
           phoneNumber: phoneNumberCustomer,
         },
         idRestaurant: restaurant.id,
-        amount: menu.price * quantity,
+        amount: (menu.price + additionalAmount) * quantity,
         products: [
           {
             name: menu.name,
             amount: menu.price,
             description: menu.description,
             quantity,
-            additional: [],
+            additional: additionalList,
             observation: observation.toUpperCase() === 'OK' ? '' : observation,
           },
         ],
@@ -76,7 +95,7 @@ export class CartsService {
       });
     } else {
       const cartUpdate: UpdateCartDto = {
-        amount: menu.price * quantity + cart.amount,
+        amount: menu.price * quantity + cart.amount + additionalAmount,
         products: [
           ...cart.products,
           {
@@ -84,7 +103,7 @@ export class CartsService {
             amount: menu.price,
             description: menu.description,
             quantity,
-            additional: [],
+            additional: additionalList,
             observation: observation.toUpperCase() === 'OK' ? '' : observation,
           },
         ],

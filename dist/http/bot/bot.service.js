@@ -159,22 +159,21 @@ let BotService = class BotService {
         let index = 0;
         for (const additional of menu.additional) {
             index++;
-            additionalMessageFormatted += `*${index}*- ${additional.description}\n`;
+            additionalMessageFormatted += `*${index}*- ${additional.description} (${new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL',
+            }).format(Number(additional.price))})\n`;
         }
         message += `${additionalMessageFormatted}\n\nInforme somente o número dos adicionais que deseja separado por (,) virgula ou envie a palavra *OK* para continuar\n\nOu envie *#* para voltar`;
         return { messageStep301: message };
     }
     async step302(additional, product, category, phoneNumberMessageBird) {
-        const additionalList = additional.trim().split(',');
-        for (const additionalItem of additionalList) {
-            console.log(additionalItem);
-        }
-        return { message: 'teste' };
     }
-    async step31(product, category, phoneNumberMessageBird) {
+    async step31(product, category, phoneNumberMessageBird, additional) {
         var _a;
         const quantity = product.toLocaleLowerCase().split('x')[0].trim();
         const item = Number(product.toLocaleLowerCase().split('x')[1].trim());
+        const additionalArray = additional.split(',');
         const phoneNumberMessageBirdFormatted = await (0, formattedPhoneNumberMessageBird_1.formattedPhoneNumberMessageBird)(phoneNumberMessageBird);
         const restaurant = await this.prisma.restaurant.findFirst({
             where: {
@@ -199,10 +198,17 @@ let BotService = class BotService {
             }
         }
         const menu = menusByCategory[item - 1];
+        let additionalMessage = '';
+        if (additionalArray[0].toLocaleUpperCase() !== 'OK') {
+            for (const additionalItem of additionalArray) {
+                const additionalDescription = menu.additional[parseInt(additionalItem.trim()) - 1].description;
+                additionalMessage += `  -${additionalDescription}\n`;
+            }
+        }
         const message = `*${quantity}un. - ${menu.name} (${new Intl.NumberFormat('pt-BR', {
             style: 'currency',
             currency: 'BRL',
-        }).format(Number(menu.price))})*${((_a = menu === null || menu === void 0 ? void 0 : menu.description) === null || _a === void 0 ? void 0 : _a.length) > 0 ? `\n-> ${menu.description}` : ''}\n->Adicionais:\n\nEscreva alguma observação(Ex.: Retirar grãos e bacon) ou envie a palavra *OK* para continuar\n\nOu envie # para voltar`;
+        }).format(Number(menu.price))})*${((_a = menu === null || menu === void 0 ? void 0 : menu.description) === null || _a === void 0 ? void 0 : _a.length) > 0 ? `\n-> ${menu.description}` : ''}\n${additionalMessage ? `-> Adicionais:\n${additionalMessage}\n` : '\n'}Escreva alguma observação(Ex.: Retirar grãos e bacon) ou envie a palavra *OK* para continuar\n\nOu envie # para voltar`;
         return { messageStep31: message };
     }
 };

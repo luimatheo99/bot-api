@@ -8,6 +8,7 @@ interface IReqStep3 {
 }
 interface IReqStep301 extends IReqStep3 {
     product: string;
+    additional: string;
 }
 interface IReqStep302 extends IReqStep301 {
     additional: string;
@@ -30,9 +31,7 @@ export declare class BotController {
     step301(req: IReqStep301): Promise<{
         messageStep301: string;
     }>;
-    step302(req: IReqStep302): Promise<{
-        message: string;
-    }>;
+    step302(req: IReqStep302): Promise<void>;
     step31(req: IReqStep301): Promise<{
         messageStep31: string;
     }>;

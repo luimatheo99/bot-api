@@ -35,7 +35,8 @@ let BotController = class BotController {
         return this.botService.step302(req.additional, req.product, req.category, req.phoneNumberMessageBird);
     }
     step31(req) {
-        return this.botService.step31(req.product, req.category, req.phoneNumberMessageBird);
+        console.log(req);
+        return this.botService.step31(req.product, req.category, req.phoneNumberMessageBird, req.additional);
     }
 };
 __decorate([
