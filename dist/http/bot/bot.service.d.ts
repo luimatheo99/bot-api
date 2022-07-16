@@ -22,4 +22,7 @@ export declare class BotService {
     step302(additional: string, product: string, category: string, phoneNumberMessageBird: string): Promise<{
         message: string;
     }>;
+    step31(product: string, category: string, phoneNumberMessageBird: string): Promise<{
+        messageStep31: string;
+    }>;
 }

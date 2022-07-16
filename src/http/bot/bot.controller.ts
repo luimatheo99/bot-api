@@ -24,7 +24,6 @@ export class BotController {
 
   @Post('/step1')
   step1(@Body() req: IReqPhoneNumberMessageBird) {
-    console.log(req);
     return this.botService.step1(req.phoneNumberMessageBird);
   }
 
@@ -40,7 +39,6 @@ export class BotController {
 
   @Post('/step3.0.1')
   step301(@Body() req: IReqStep301) {
-    console.log(req);
     return this.botService.step301(
       req.product,
       req.category,
@@ -52,6 +50,15 @@ export class BotController {
   step302(@Body() req: IReqStep302) {
     return this.botService.step302(
       req.additional,
+      req.product,
+      req.category,
+      req.phoneNumberMessageBird,
+    );
+  }
+
+  @Post('/step3.1')
+  step31(@Body() req: IReqStep301) {
+    return this.botService.step31(
       req.product,
       req.category,
       req.phoneNumberMessageBird,

@@ -33,5 +33,8 @@ export declare class BotController {
     step302(req: IReqStep302): Promise<{
         message: string;
     }>;
+    step31(req: IReqStep301): Promise<{
+        messageStep31: string;
+    }>;
 }
 export {};
