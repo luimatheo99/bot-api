@@ -16,7 +16,7 @@ let CartsService = class CartsService {
     constructor(prisma) {
         this.prisma = prisma;
     }
-    async create(channelId, phoneNumberCustomer, product, additional, category, observation) {
+    async create(channelId, phoneNumberCustomer, product, additional, additionalCount, category, observation) {
         const quantityExists = product.toLocaleLowerCase().match('x');
         let item;
         let quantity = 1;
@@ -54,7 +54,8 @@ let CartsService = class CartsService {
         });
         let additionalAmount = 0;
         const additionalList = [];
-        if (additionalArray[0].toLocaleUpperCase() !== 'OK') {
+        if (additionalArray[0].toLocaleUpperCase() !== 'OK' &&
+            parseInt(additionalCount) > 0) {
             for (const additionalItem of additionalArray) {
                 const additionalPrice = menu.additional[parseInt(additionalItem.trim()) - 1].price;
                 const additionalDescription = menu.additional[parseInt(additionalItem.trim()) - 1].description;

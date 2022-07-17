@@ -9,6 +9,7 @@ interface IReqStep3 {
 interface IReqStep301 extends IReqStep3 {
     product: string;
     additional: string;
+    additionalCount: string;
 }
 export declare class BotController {
     private readonly botService;

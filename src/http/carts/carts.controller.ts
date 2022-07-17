@@ -7,6 +7,7 @@ interface IReqCreate {
   category: string;
   product: string;
   additional: string;
+  additionalCount: string;
   observation: string;
 }
 
@@ -16,12 +17,12 @@ export class CartsController {
 
   @Post('/add')
   create(@Body() req: IReqCreate) {
-    console.log(req);
     return this.cartsService.create(
       req.channelId,
       req.phoneNumberCustomer,
       req.product,
       req.additional,
+      req.additionalCount,
       req.category,
       req.observation,
     );

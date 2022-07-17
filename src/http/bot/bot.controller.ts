@@ -13,6 +13,7 @@ interface IReqStep3 {
 interface IReqStep301 extends IReqStep3 {
   product: string;
   additional: string;
+  additionalCount: string;
 }
 
 @Controller('bot')
@@ -41,12 +42,12 @@ export class BotController {
 
   @Post('/step3.1')
   step31(@Body() req: IReqStep301) {
-    console.log(req);
     return this.botService.step31(
       req.product,
       req.category,
       req.channelId,
       req.additional,
+      req.additionalCount,
     );
   }
 }

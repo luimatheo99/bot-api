@@ -68,7 +68,7 @@ let BotService = class BotService {
             index++;
             options += index + ',';
             if (category) {
-                categories += `*${category.order}*- ${category.description}\n`;
+                categories += `*${category.order}.* ${category.description}\n`;
             }
         }
         options = `[1-${index}]`;
@@ -99,7 +99,7 @@ let BotService = class BotService {
         for (const menu of menus) {
             if (menu.category === restaurantCategory.description) {
                 index++;
-                menusMessageFormatted += `*${index}*- ${menu.name} (${new Intl.NumberFormat('pt-BR', {
+                menusMessageFormatted += `*${index}.* ${menu.name} (${new Intl.NumberFormat('pt-BR', {
                     style: 'currency',
                     currency: 'BRL',
                 }).format(Number(menu.price))})${((_a = menu === null || menu === void 0 ? void 0 : menu.description) === null || _a === void 0 ? void 0 : _a.length) > 0 ? `\n-> ${menu.description}` : ''}\n`;
@@ -153,7 +153,7 @@ let BotService = class BotService {
         let index = 0;
         for (const additional of menu.additional) {
             index++;
-            additionalMessageFormatted += `*${index}*- ${additional.description} (${new Intl.NumberFormat('pt-BR', {
+            additionalMessageFormatted += `*${index}.* ${additional.description} (${new Intl.NumberFormat('pt-BR', {
                 style: 'currency',
                 currency: 'BRL',
             }).format(Number(additional.price))})\n`;
@@ -161,7 +161,7 @@ let BotService = class BotService {
         message += `${additionalMessageFormatted}\n\nInforme somente o número dos adicionais que deseja separado por (,) virgula ou envie a palavra *OK* para continuar\n\nOu envie *#* para voltar`;
         return { messageStep301: message };
     }
-    async step31(product, category, channelId, additional) {
+    async step31(product, category, channelId, additional, additionalCount) {
         var _a;
         const quantityExists = product.toLocaleLowerCase().match('x');
         let item;
@@ -196,7 +196,8 @@ let BotService = class BotService {
         }
         const menu = menusByCategory[item - 1];
         let additionalMessage = '';
-        if (additionalArray[0].toLocaleUpperCase() !== 'OK') {
+        if (additionalArray[0].toLocaleUpperCase() !== 'OK' &&
+            parseInt(additionalCount) > 0) {
             for (const additionalItem of additionalArray) {
                 const additionalDescription = menu.additional[parseInt(additionalItem.trim()) - 1].description;
                 additionalMessage += `  -${additionalDescription}\n`;

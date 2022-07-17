@@ -60,7 +60,7 @@ export class BotService {
       index++;
       options += index + ',';
       if (category) {
-        categories += `*${category.order}*- ${category.description}\n`;
+        categories += `*${category.order}.* ${category.description}\n`;
       }
     }
 
@@ -97,7 +97,7 @@ export class BotService {
       if (menu.category === restaurantCategory.description) {
         index++;
 
-        menusMessageFormatted += `*${index}*- ${
+        menusMessageFormatted += `*${index}.* ${
           menu.name
         } (${new Intl.NumberFormat('pt-BR', {
           style: 'currency',
@@ -113,7 +113,6 @@ export class BotService {
     options = `[1-${index}]`;
 
     message += `${menusMessageFormatted}\nOu envie *#* para voltar`;
-
     return {
       messageStep3: message,
       optionsStep3: options,
@@ -165,7 +164,7 @@ export class BotService {
     let index = 0;
     for (const additional of menu.additional) {
       index++;
-      additionalMessageFormatted += `*${index}*- ${
+      additionalMessageFormatted += `*${index}.* ${
         additional.description
       } (${new Intl.NumberFormat('pt-BR', {
         style: 'currency',
@@ -183,6 +182,7 @@ export class BotService {
     category: string,
     channelId: string,
     additional: string,
+    additionalCount: string,
   ) {
     const quantityExists = product.toLocaleLowerCase().match('x');
     let item: number;
@@ -221,11 +221,13 @@ export class BotService {
     const menu = menusByCategory[item - 1];
 
     let additionalMessage = '';
-    if (additionalArray[0].toLocaleUpperCase() !== 'OK') {
+    if (
+      additionalArray[0].toLocaleUpperCase() !== 'OK' &&
+      parseInt(additionalCount) > 0
+    ) {
       for (const additionalItem of additionalArray) {
         // const additionalPrice =
         //   menu.additional[parseInt(additionalItem.trim()) - 1].price;
-
         const additionalDescription =
           menu.additional[parseInt(additionalItem.trim()) - 1].description;
 

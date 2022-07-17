@@ -20,6 +20,7 @@ let BotController = class BotController {
         this.botService = botService;
     }
     step1(req) {
+        console.log(req);
         return this.botService.step1(req.channelId);
     }
     step2(req) {
@@ -33,7 +34,7 @@ let BotController = class BotController {
     }
     step31(req) {
         console.log(req);
-        return this.botService.step31(req.product, req.category, req.channelId, req.additional);
+        return this.botService.step31(req.product, req.category, req.channelId, req.additional, req.additionalCount);
     }
 };
 __decorate([

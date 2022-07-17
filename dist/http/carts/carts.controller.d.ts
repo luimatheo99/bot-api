@@ -5,6 +5,7 @@ interface IReqCreate {
     category: string;
     product: string;
     additional: string;
+    additionalCount: string;
     observation: string;
 }
 export declare class CartsController {

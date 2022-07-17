@@ -12,6 +12,7 @@ export class CartsService {
     phoneNumberCustomer: string,
     product: string,
     additional: string,
+    additionalCount: string,
     category: string,
     observation: string,
   ) {
@@ -57,7 +58,10 @@ export class CartsService {
 
     let additionalAmount = 0;
     const additionalList = [];
-    if (additionalArray[0].toLocaleUpperCase() !== 'OK') {
+    if (
+      additionalArray[0].toLocaleUpperCase() !== 'OK' &&
+      parseInt(additionalCount) > 0
+    ) {
       for (const additionalItem of additionalArray) {
         const additionalPrice =
           menu.additional[parseInt(additionalItem.trim()) - 1].price;

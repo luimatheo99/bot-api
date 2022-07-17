@@ -19,7 +19,7 @@ export declare class BotService {
     step301(product: string, category: string, channelId: string): Promise<{
         messageStep301: string;
     }>;
-    step31(product: string, category: string, channelId: string, additional: string): Promise<{
+    step31(product: string, category: string, channelId: string, additional: string, additionalCount: string): Promise<{
         messageStep31: string;
     }>;
 }
