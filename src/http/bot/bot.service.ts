@@ -142,7 +142,13 @@ export class BotService {
     category: string,
     phoneNumberMessageBird: string,
   ) {
-    const item = Number(product.toLocaleLowerCase().split('x')[1].trim());
+    const quantityExists = product.toLocaleLowerCase().match('x');
+    let item: number;
+    if (!quantityExists) {
+      item = Number(product.trim());
+    } else {
+      item = Number(product.toLocaleLowerCase().split('x')[1].trim());
+    }
 
     const phoneNumberMessageBirdFormatted =
       await formattedPhoneNumberMessageBird(phoneNumberMessageBird);
@@ -216,8 +222,16 @@ export class BotService {
     phoneNumberMessageBird: string,
     additional: string,
   ) {
-    const quantity = product.toLocaleLowerCase().split('x')[0].trim();
-    const item = Number(product.toLocaleLowerCase().split('x')[1].trim());
+    const quantityExists = product.toLocaleLowerCase().match('x');
+    let item: number;
+    let quantity = 1;
+    if (!quantityExists) {
+      item = Number(product.trim());
+    } else {
+      item = Number(product.toLocaleLowerCase().split('x')[1].trim());
+      quantity = Number(product.toLocaleLowerCase().split('x')[0].trim());
+    }
+
     const additionalArray = additional.split(',');
 
     const phoneNumberMessageBirdFormatted =

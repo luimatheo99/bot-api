@@ -20,8 +20,18 @@ export class CartsService {
     const phoneNumberMessageBirdFormatted =
       await formattedPhoneNumberMessageBird(phoneNumberMessageBird);
 
-    const quantity = parseInt(product.toLocaleLowerCase().split('x')[0].trim());
-    const item = Number(product.toLocaleLowerCase().split('x')[1].trim());
+    const quantityExists = product.toLocaleLowerCase().match('x');
+    let item: number;
+    let quantity = 1;
+    if (!quantityExists) {
+      item = Number(product.trim());
+    } else {
+      item = Number(product.toLocaleLowerCase().split('x')[1].trim());
+      quantity = Number(product.toLocaleLowerCase().split('x')[0].trim());
+    }
+
+    // const quantity = parseInt(product.toLocaleLowerCase().split('x')[0].trim());
+    // const item = Number(product.toLocaleLowerCase().split('x')[1].trim());
 
     const additionalArray = additional.split(',');
 
@@ -57,19 +67,21 @@ export class CartsService {
 
     let additionalAmount = 0;
     const additionalList = [];
-    for (const additionalItem of additionalArray) {
-      const additionalPrice =
-        menu.additional[parseInt(additionalItem.trim()) - 1].price;
+    if (additionalArray[0].toLocaleUpperCase() !== 'OK') {
+      for (const additionalItem of additionalArray) {
+        const additionalPrice =
+          menu.additional[parseInt(additionalItem.trim()) - 1].price;
 
-      const additionalDescription =
-        menu.additional[parseInt(additionalItem.trim()) - 1].description;
+        const additionalDescription =
+          menu.additional[parseInt(additionalItem.trim()) - 1].description;
 
-      additionalList.push({
-        description: additionalDescription,
-        price: additionalPrice,
-      });
+        additionalList.push({
+          description: additionalDescription,
+          price: additionalPrice,
+        });
 
-      additionalAmount += additionalPrice * quantity;
+        additionalAmount += additionalPrice * quantity;
+      }
     }
 
     if (!cart) {

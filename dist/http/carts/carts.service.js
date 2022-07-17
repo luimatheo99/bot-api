@@ -19,8 +19,16 @@ let CartsService = class CartsService {
     }
     async create(phoneNumberMessageBird, phoneNumberCustomer, product, additional, category, observation) {
         const phoneNumberMessageBirdFormatted = await (0, formattedPhoneNumberMessageBird_1.formattedPhoneNumberMessageBird)(phoneNumberMessageBird);
-        const quantity = parseInt(product.toLocaleLowerCase().split('x')[0].trim());
-        const item = Number(product.toLocaleLowerCase().split('x')[1].trim());
+        const quantityExists = product.toLocaleLowerCase().match('x');
+        let item;
+        let quantity = 1;
+        if (!quantityExists) {
+            item = Number(product.trim());
+        }
+        else {
+            item = Number(product.toLocaleLowerCase().split('x')[1].trim());
+            quantity = Number(product.toLocaleLowerCase().split('x')[0].trim());
+        }
         const additionalArray = additional.split(',');
         const restaurant = await this.prisma.restaurant.findFirst({
             where: {
@@ -50,14 +58,16 @@ let CartsService = class CartsService {
         });
         let additionalAmount = 0;
         const additionalList = [];
-        for (const additionalItem of additionalArray) {
-            const additionalPrice = menu.additional[parseInt(additionalItem.trim()) - 1].price;
-            const additionalDescription = menu.additional[parseInt(additionalItem.trim()) - 1].description;
-            additionalList.push({
-                description: additionalDescription,
-                price: additionalPrice,
-            });
-            additionalAmount += additionalPrice * quantity;
+        if (additionalArray[0].toLocaleUpperCase() !== 'OK') {
+            for (const additionalItem of additionalArray) {
+                const additionalPrice = menu.additional[parseInt(additionalItem.trim()) - 1].price;
+                const additionalDescription = menu.additional[parseInt(additionalItem.trim()) - 1].description;
+                additionalList.push({
+                    description: additionalDescription,
+                    price: additionalPrice,
+                });
+                additionalAmount += additionalPrice * quantity;
+            }
         }
         if (!cart) {
             const cartNew = {
