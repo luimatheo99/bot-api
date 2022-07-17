@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { formattedPhoneNumberMessageBird } from 'src/utils/functions/formattedPhoneNumberMessageBird';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import { CartsService } from '../carts/carts.service';
 
@@ -10,14 +9,9 @@ export class BotService {
     private cartsService: CartsService,
   ) {}
 
-  async step1(phoneNumberMessageBird: string) {
-    const phoneNumberMessageBirdFormatted =
-      await formattedPhoneNumberMessageBird(phoneNumberMessageBird);
-
+  async step1(channelId: string) {
     const restaurant = await this.prisma.restaurant.findFirst({
-      where: {
-        phoneNumberMessageBird: phoneNumberMessageBirdFormatted,
-      },
+      where: { channelId },
     });
 
     let schedules = '';
@@ -49,14 +43,9 @@ export class BotService {
     return { messageStep1 };
   }
 
-  async step2(phoneNumberMessageBird: string) {
-    const phoneNumberMessageBirdFormatted =
-      await formattedPhoneNumberMessageBird(phoneNumberMessageBird);
-
+  async step2(channelId: string) {
     const restaurant = await this.prisma.restaurant.findFirst({
-      where: {
-        phoneNumberMessageBird: phoneNumberMessageBirdFormatted,
-      },
+      where: { channelId },
     });
 
     const restaurantCategories = await this.prisma.restaurantCategory.findMany({
@@ -81,14 +70,9 @@ export class BotService {
     return { messageStep2, optionsStep2: options };
   }
 
-  async step3(category: string, phoneNumberMessageBird: string) {
-    const phoneNumberMessageBirdFormatted =
-      await formattedPhoneNumberMessageBird(phoneNumberMessageBird);
-
+  async step3(category: string, channelId: string) {
     const restaurant = await this.prisma.restaurant.findFirst({
-      where: {
-        phoneNumberMessageBird: phoneNumberMessageBirdFormatted,
-      },
+      where: { channelId },
       select: {
         id: true,
         menu: true,
@@ -137,11 +121,7 @@ export class BotService {
     };
   }
 
-  async step301(
-    product: string,
-    category: string,
-    phoneNumberMessageBird: string,
-  ) {
+  async step301(product: string, category: string, channelId: string) {
     const quantityExists = product.toLocaleLowerCase().match('x');
     let item: number;
     if (!quantityExists) {
@@ -150,13 +130,8 @@ export class BotService {
       item = Number(product.toLocaleLowerCase().split('x')[1].trim());
     }
 
-    const phoneNumberMessageBirdFormatted =
-      await formattedPhoneNumberMessageBird(phoneNumberMessageBird);
-
     const restaurant = await this.prisma.restaurant.findFirst({
-      where: {
-        phoneNumberMessageBird: phoneNumberMessageBirdFormatted,
-      },
+      where: { channelId },
       select: {
         id: true,
         menu: true,
@@ -203,23 +178,10 @@ export class BotService {
     return { messageStep301: message };
   }
 
-  async step302(
-    additional: string,
-    product: string,
-    category: string,
-    phoneNumberMessageBird: string,
-  ) {
-    // const additionalList = additional.trim().split(',');
-    // for (const additionalItem of additionalList) {
-    //   console.log(additionalItem);
-    // }
-    // return { message: 'teste' };
-  }
-
   async step31(
     product: string,
     category: string,
-    phoneNumberMessageBird: string,
+    channelId: string,
     additional: string,
   ) {
     const quantityExists = product.toLocaleLowerCase().match('x');
@@ -234,13 +196,8 @@ export class BotService {
 
     const additionalArray = additional.split(',');
 
-    const phoneNumberMessageBirdFormatted =
-      await formattedPhoneNumberMessageBird(phoneNumberMessageBird);
-
     const restaurant = await this.prisma.restaurant.findFirst({
-      where: {
-        phoneNumberMessageBird: phoneNumberMessageBirdFormatted,
-      },
+      where: { channelId },
       select: {
         id: true,
         menu: true,

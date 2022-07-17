@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { RestaurantCarts } from '@prisma/client';
-import { formattedPhoneNumberMessageBird } from 'src/utils/functions/formattedPhoneNumberMessageBird';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import { CreateCartDto } from './dto/create-cart.dto';
 import { UpdateCartDto } from './dto/update-cart.dto';
@@ -10,16 +8,13 @@ export class CartsService {
   constructor(private prisma: PrismaService) {}
 
   async create(
-    phoneNumberMessageBird: string,
+    channelId: string,
     phoneNumberCustomer: string,
     product: string,
     additional: string,
     category: string,
     observation: string,
   ) {
-    const phoneNumberMessageBirdFormatted =
-      await formattedPhoneNumberMessageBird(phoneNumberMessageBird);
-
     const quantityExists = product.toLocaleLowerCase().match('x');
     let item: number;
     let quantity = 1;
@@ -30,15 +25,10 @@ export class CartsService {
       quantity = Number(product.toLocaleLowerCase().split('x')[0].trim());
     }
 
-    // const quantity = parseInt(product.toLocaleLowerCase().split('x')[0].trim());
-    // const item = Number(product.toLocaleLowerCase().split('x')[1].trim());
-
     const additionalArray = additional.split(',');
 
     const restaurant = await this.prisma.restaurant.findFirst({
-      where: {
-        phoneNumberMessageBird: phoneNumberMessageBirdFormatted,
-      },
+      where: { channelId },
       select: {
         id: true,
         menu: true,

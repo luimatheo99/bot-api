@@ -4,23 +4,22 @@ export declare class BotService {
     private prisma;
     private cartsService;
     constructor(prisma: PrismaService, cartsService: CartsService);
-    step1(phoneNumberMessageBird: string): Promise<{
+    step1(channelId: string): Promise<{
         messageStep1: string;
     }>;
-    step2(phoneNumberMessageBird: string): Promise<{
+    step2(channelId: string): Promise<{
         messageStep2: string;
         optionsStep2: string;
     }>;
-    step3(category: string, phoneNumberMessageBird: string): Promise<{
+    step3(category: string, channelId: string): Promise<{
         messageStep3: string;
         optionsStep3: string;
         additionalCountStep3: number;
     }>;
-    step301(product: string, category: string, phoneNumberMessageBird: string): Promise<{
+    step301(product: string, category: string, channelId: string): Promise<{
         messageStep301: string;
     }>;
-    step302(additional: string, product: string, category: string, phoneNumberMessageBird: string): Promise<void>;
-    step31(product: string, category: string, phoneNumberMessageBird: string, additional: string): Promise<{
+    step31(product: string, category: string, channelId: string, additional: string): Promise<{
         messageStep31: string;
     }>;
 }

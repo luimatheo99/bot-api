@@ -21,7 +21,7 @@ let CartsController = class CartsController {
     }
     create(req) {
         console.log(req);
-        return this.cartsService.create(req.phoneNumberMessageBird, req.phoneNumberCustomer, req.product, req.additional, req.category, req.observation);
+        return this.cartsService.create(req.channelId, req.phoneNumberCustomer, req.product, req.additional, req.category, req.observation);
     }
 };
 __decorate([

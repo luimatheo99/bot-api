@@ -1,6 +1,6 @@
 import { CartsService } from './carts.service';
 interface IReqCreate {
-    phoneNumberMessageBird: string;
+    channelId: string;
     phoneNumberCustomer: string;
     category: string;
     product: string;

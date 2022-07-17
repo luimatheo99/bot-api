@@ -11,7 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BotService = void 0;
 const common_1 = require("@nestjs/common");
-const formattedPhoneNumberMessageBird_1 = require("../../utils/functions/formattedPhoneNumberMessageBird");
 const prisma_service_1 = require("../../database/prisma/prisma.service");
 const carts_service_1 = require("../carts/carts.service");
 let BotService = class BotService {
@@ -19,12 +18,9 @@ let BotService = class BotService {
         this.prisma = prisma;
         this.cartsService = cartsService;
     }
-    async step1(phoneNumberMessageBird) {
-        const phoneNumberMessageBirdFormatted = await (0, formattedPhoneNumberMessageBird_1.formattedPhoneNumberMessageBird)(phoneNumberMessageBird);
+    async step1(channelId) {
         const restaurant = await this.prisma.restaurant.findFirst({
-            where: {
-                phoneNumberMessageBird: phoneNumberMessageBirdFormatted,
-            },
+            where: { channelId },
         });
         let schedules = '';
         for (const schedule of restaurant.schedules) {
@@ -57,12 +53,9 @@ let BotService = class BotService {
         const messageStep1 = `Olá\nEste é um canal de *Auto Atendimento*, não há uma pessoa lendo suas mensagens e não visualizamos imagens, vídeos ou áudios. Você deve informar apenas o que lhe for solicitado e sempre aguardar a resposta.\n\n*Informações*\nHorários de atendimentos:\n${schedules}Contato/Dúvidas: ${restaurant.phoneNumber}`;
         return { messageStep1 };
     }
-    async step2(phoneNumberMessageBird) {
-        const phoneNumberMessageBirdFormatted = await (0, formattedPhoneNumberMessageBird_1.formattedPhoneNumberMessageBird)(phoneNumberMessageBird);
+    async step2(channelId) {
         const restaurant = await this.prisma.restaurant.findFirst({
-            where: {
-                phoneNumberMessageBird: phoneNumberMessageBirdFormatted,
-            },
+            where: { channelId },
         });
         const restaurantCategories = await this.prisma.restaurantCategory.findMany({
             where: { idRestaurant: restaurant.id },
@@ -82,13 +75,10 @@ let BotService = class BotService {
         const messageStep2 = `Informe uma das opcões ( *apenas o número* )\n\n*MENU*\n\n*Categorias*\n${categories}`;
         return { messageStep2, optionsStep2: options };
     }
-    async step3(category, phoneNumberMessageBird) {
+    async step3(category, channelId) {
         var _a;
-        const phoneNumberMessageBirdFormatted = await (0, formattedPhoneNumberMessageBird_1.formattedPhoneNumberMessageBird)(phoneNumberMessageBird);
         const restaurant = await this.prisma.restaurant.findFirst({
-            where: {
-                phoneNumberMessageBird: phoneNumberMessageBirdFormatted,
-            },
+            where: { channelId },
             select: {
                 id: true,
                 menu: true,
@@ -124,7 +114,7 @@ let BotService = class BotService {
             additionalCountStep3: additionalCount,
         };
     }
-    async step301(product, category, phoneNumberMessageBird) {
+    async step301(product, category, channelId) {
         var _a;
         const quantityExists = product.toLocaleLowerCase().match('x');
         let item;
@@ -134,11 +124,8 @@ let BotService = class BotService {
         else {
             item = Number(product.toLocaleLowerCase().split('x')[1].trim());
         }
-        const phoneNumberMessageBirdFormatted = await (0, formattedPhoneNumberMessageBird_1.formattedPhoneNumberMessageBird)(phoneNumberMessageBird);
         const restaurant = await this.prisma.restaurant.findFirst({
-            where: {
-                phoneNumberMessageBird: phoneNumberMessageBirdFormatted,
-            },
+            where: { channelId },
             select: {
                 id: true,
                 menu: true,
@@ -174,9 +161,7 @@ let BotService = class BotService {
         message += `${additionalMessageFormatted}\n\nInforme somente o número dos adicionais que deseja separado por (,) virgula ou envie a palavra *OK* para continuar\n\nOu envie *#* para voltar`;
         return { messageStep301: message };
     }
-    async step302(additional, product, category, phoneNumberMessageBird) {
-    }
-    async step31(product, category, phoneNumberMessageBird, additional) {
+    async step31(product, category, channelId, additional) {
         var _a;
         const quantityExists = product.toLocaleLowerCase().match('x');
         let item;
@@ -189,11 +174,8 @@ let BotService = class BotService {
             quantity = Number(product.toLocaleLowerCase().split('x')[0].trim());
         }
         const additionalArray = additional.split(',');
-        const phoneNumberMessageBirdFormatted = await (0, formattedPhoneNumberMessageBird_1.formattedPhoneNumberMessageBird)(phoneNumberMessageBird);
         const restaurant = await this.prisma.restaurant.findFirst({
-            where: {
-                phoneNumberMessageBird: phoneNumberMessageBirdFormatted,
-            },
+            where: { channelId },
             select: {
                 id: true,
                 menu: true,

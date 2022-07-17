@@ -1,9 +1,8 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { CartsService } from './carts.service';
-import { CreateCartDto } from './dto/create-cart.dto';
 
 interface IReqCreate {
-  phoneNumberMessageBird: string;
+  channelId: string;
   phoneNumberCustomer: string;
   category: string;
   product: string;
@@ -19,7 +18,7 @@ export class CartsController {
   create(@Body() req: IReqCreate) {
     console.log(req);
     return this.cartsService.create(
-      req.phoneNumberMessageBird,
+      req.channelId,
       req.phoneNumberCustomer,
       req.product,
       req.additional,

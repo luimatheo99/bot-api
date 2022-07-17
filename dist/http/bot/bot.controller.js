@@ -20,23 +20,20 @@ let BotController = class BotController {
         this.botService = botService;
     }
     step1(req) {
-        return this.botService.step1(req.phoneNumberMessageBird);
+        return this.botService.step1(req.channelId);
     }
     step2(req) {
-        return this.botService.step2(req.phoneNumberMessageBird);
+        return this.botService.step2(req.channelId);
     }
     step3(req) {
-        return this.botService.step3(req.category, req.phoneNumberMessageBird);
+        return this.botService.step3(req.category, req.channelId);
     }
     step301(req) {
-        return this.botService.step301(req.product, req.category, req.phoneNumberMessageBird);
-    }
-    step302(req) {
-        return this.botService.step302(req.additional, req.product, req.category, req.phoneNumberMessageBird);
+        return this.botService.step301(req.product, req.category, req.channelId);
     }
     step31(req) {
         console.log(req);
-        return this.botService.step31(req.product, req.category, req.phoneNumberMessageBird, req.additional);
+        return this.botService.step31(req.product, req.category, req.channelId, req.additional);
     }
 };
 __decorate([
@@ -67,13 +64,6 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], BotController.prototype, "step301", null);
-__decorate([
-    (0, common_1.Post)('/step3.0.2'),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
-], BotController.prototype, "step302", null);
 __decorate([
     (0, common_1.Post)('/step3.1'),
     __param(0, (0, common_1.Body)()),

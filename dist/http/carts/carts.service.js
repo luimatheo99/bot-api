@@ -11,14 +11,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CartsService = void 0;
 const common_1 = require("@nestjs/common");
-const formattedPhoneNumberMessageBird_1 = require("../../utils/functions/formattedPhoneNumberMessageBird");
 const prisma_service_1 = require("../../database/prisma/prisma.service");
 let CartsService = class CartsService {
     constructor(prisma) {
         this.prisma = prisma;
     }
-    async create(phoneNumberMessageBird, phoneNumberCustomer, product, additional, category, observation) {
-        const phoneNumberMessageBirdFormatted = await (0, formattedPhoneNumberMessageBird_1.formattedPhoneNumberMessageBird)(phoneNumberMessageBird);
+    async create(channelId, phoneNumberCustomer, product, additional, category, observation) {
         const quantityExists = product.toLocaleLowerCase().match('x');
         let item;
         let quantity = 1;
@@ -31,9 +29,7 @@ let CartsService = class CartsService {
         }
         const additionalArray = additional.split(',');
         const restaurant = await this.prisma.restaurant.findFirst({
-            where: {
-                phoneNumberMessageBird: phoneNumberMessageBirdFormatted,
-            },
+            where: { channelId },
             select: {
                 id: true,
                 menu: true,
